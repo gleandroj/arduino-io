@@ -1,12 +1,14 @@
 # Arduino IO
-###### Connect Arduino and WebSocket (SocketIO) from everywhere simple and real time.
+
+Connect Arduino and WebSocket (SocketIO) from everywhere simple and real time.
+
 ### Dependencies
  - [CMD](https://github.com/gleandroj/Cmd) - Simple Arduino Command Processor Library
  - [Socket Io 1.x.x](https://socket.io/) - WebSocket Library
  
 ### Compatibility
-*   ###### Tested with Socket Io Version 1.7.2
-*   ###### Tested with Arduino Uno and Ethernet Library
+*   Tested with Socket Io Version 1.7.2
+*   Tested with Arduino Uno and Ethernet Library
 
 ### Get Started
 ```sh
@@ -15,9 +17,8 @@ $ npm install
 $ npm start
 ```
 
-##### Now you upload the arduino-io.ino into your arduino.
-###
-##
+Now you upload the arduino-io.ino into your arduino.
+
 ```
 #include <Regexp.h>
 #include <Cmd.h>
@@ -36,5 +37,6 @@ $ npm start
     ...
 ```
 
-#### Enjoy!
+Enjoy!
+
 Found this project useful? Please star this project! 😄
