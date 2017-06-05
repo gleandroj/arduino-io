@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!-- Copyright 2013 by Bill Roy - MIT license - See LICENSE file -->
+<html><head>
+	<title>Lamp</title>
+	<meta content="width=device-width,initial-scale=1" name=viewport>
+	<script type='text/javascript' src='https://code.jquery.com/jquery-1.9.1.min.js'></script>
+	<script type='text/javascript' src='/socket.io/socket.io.js'></script>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="container" style="margin-top: 50px;">
+	<div class="row">
+		<div class="col-lg-4">
+			<div class="panel panel-default">
+			  <div class="panel-heading">Lâmpada I.T</div>
+			  <div class="panel-body" style="text-align: center;">
+				<img class="img-responsive" id="lamp" src="/static/error.png" />
+			  </div>
+			  <div class="panel-footer">
+				<button id="toggle">Toggle</button>
+			  </div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type='text/javascript' charset='utf8'>
+var _socket = null;
+let pin = 7;
+let _toggle = 0;
+
+$(document).ready(function() {
+	 let readCmd = 'digital read '+pin;
+	_socket = io({transports: ['websocket']});
+	_socket.on('connected', function(){
+		_socket.emit('arduino command', {cmd: readCmd});
+		_socket.emit('arduino command', {cmd: 'pin mode '+pin+' 0'});
+	});
+	_socket.on('arduino response', function(data) {
+		if(data.response.pin == pin){
+			_toggle = data.response.value === 1 ? 0 : 255;
+			$("#lamp").attr('src', data.response.value === 1 ? '/static/01.png' : '/static/00.png');
+		}
+	});
+	$("#toggle").on('click', function(){
+		let cmd = 'digital write '+pin+' '+ _toggle;
+		_socket.emit('arduino command', {cmd: cmd});
+		_toggle = _toggle === 0 ? 255 : 0;
+	}); 
+});
+</script>
+</body>
+</html>
